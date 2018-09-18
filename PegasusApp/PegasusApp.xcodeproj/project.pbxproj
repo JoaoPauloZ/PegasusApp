@@ -7,19 +7,47 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		012F27A02150ACF700EE253E /* CDJoystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012F279F2150ACF700EE253E /* CDJoystick.swift */; };
 		01B9325D214D6919004B607D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B9325C214D6919004B607D /* AppDelegate.swift */; };
 		01B9325F214D6919004B607D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B9325E214D6919004B607D /* ViewController.swift */; };
 		01B93264214D691A004B607D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01B93263214D691A004B607D /* Assets.xcassets */; };
 		01B93267214D691A004B607D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01B93265214D691A004B607D /* LaunchScreen.storyboard */; };
+		01B93291214DA131004B607D /* NSLayoutConstraint+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B93288214DA131004B607D /* NSLayoutConstraint+PureLayout.m */; };
+		01B93292214DA131004B607D /* ALView+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B9328B214DA131004B607D /* ALView+PureLayout.m */; };
+		01B93293214DA131004B607D /* NSArray+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B9328E214DA131004B607D /* NSArray+PureLayout.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		01B93280214D6E7C004B607D /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		012F279F2150ACF700EE253E /* CDJoystick.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDJoystick.swift; sourceTree = "<group>"; };
 		01B93259214D6919004B607D /* PegasusApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PegasusApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		01B9325C214D6919004B607D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		01B9325E214D6919004B607D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		01B93263214D691A004B607D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		01B93266214D691A004B607D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		01B93268214D691A004B607D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		01B9326F214D6C6D004B607D /* PegasusApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PegasusApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		01B93286214DA131004B607D /* PureLayoutDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PureLayoutDefines.h; sourceTree = "<group>"; };
+		01B93287214DA131004B607D /* ALView+PureLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALView+PureLayout.h"; sourceTree = "<group>"; };
+		01B93288214DA131004B607D /* NSLayoutConstraint+PureLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSLayoutConstraint+PureLayout.m"; sourceTree = "<group>"; };
+		01B93289214DA131004B607D /* NSArray+PureLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+PureLayout.h"; sourceTree = "<group>"; };
+		01B9328A214DA131004B607D /* NSLayoutConstraint+PureLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSLayoutConstraint+PureLayout.h"; sourceTree = "<group>"; };
+		01B9328B214DA131004B607D /* ALView+PureLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALView+PureLayout.m"; sourceTree = "<group>"; };
+		01B9328C214DA131004B607D /* PureLayout+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PureLayout+Internal.h"; sourceTree = "<group>"; };
+		01B9328D214DA131004B607D /* PureLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PureLayout.h; sourceTree = "<group>"; };
+		01B9328E214DA131004B607D /* NSArray+PureLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+PureLayout.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,14 +80,58 @@
 		01B9325B214D6919004B607D /* PegasusApp */ = {
 			isa = PBXGroup;
 			children = (
+				01B93275214D6CA7004B607D /* 3dr Party */,
+				01B93274214D6C94004B607D /* Utils */,
+				01B93273214D6C7F004B607D /* ViewControllers */,
 				01B9325C214D6919004B607D /* AppDelegate.swift */,
-				01B9325E214D6919004B607D /* ViewController.swift */,
 				01B93263214D691A004B607D /* Assets.xcassets */,
 				01B93265214D691A004B607D /* LaunchScreen.storyboard */,
 				01B93268214D691A004B607D /* Info.plist */,
+				01B9326F214D6C6D004B607D /* PegasusApp-Bridging-Header.h */,
 			);
 			path = PegasusApp;
 			sourceTree = "<group>";
+		};
+		01B93273214D6C7F004B607D /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				01B9325E214D6919004B607D /* ViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		01B93274214D6C94004B607D /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				012F279F2150ACF700EE253E /* CDJoystick.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		01B93275214D6CA7004B607D /* 3dr Party */ = {
+			isa = PBXGroup;
+			children = (
+				01B93285214DA131004B607D /* PureLayout */,
+			);
+			path = "3dr Party";
+			sourceTree = "<group>";
+		};
+		01B93285214DA131004B607D /* PureLayout */ = {
+			isa = PBXGroup;
+			children = (
+				01B93286214DA131004B607D /* PureLayoutDefines.h */,
+				01B93287214DA131004B607D /* ALView+PureLayout.h */,
+				01B93288214DA131004B607D /* NSLayoutConstraint+PureLayout.m */,
+				01B93289214DA131004B607D /* NSArray+PureLayout.h */,
+				01B9328A214DA131004B607D /* NSLayoutConstraint+PureLayout.h */,
+				01B9328B214DA131004B607D /* ALView+PureLayout.m */,
+				01B9328C214DA131004B607D /* PureLayout+Internal.h */,
+				01B9328D214DA131004B607D /* PureLayout.h */,
+				01B9328E214DA131004B607D /* NSArray+PureLayout.m */,
+			);
+			name = PureLayout;
+			path = ../Submodules/PureLayout/PureLayout/PureLayout;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -71,6 +143,7 @@
 				01B93255214D6919004B607D /* Sources */,
 				01B93256214D6919004B607D /* Frameworks */,
 				01B93257214D6919004B607D /* Resources */,
+				01B93280214D6E7C004B607D /* Copy Frameworks */,
 			);
 			buildRules = (
 			);
@@ -93,6 +166,7 @@
 				TargetAttributes = {
 					01B93258214D6919004B607D = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 0940;
 					};
 				};
 			};
@@ -131,8 +205,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				012F27A02150ACF700EE253E /* CDJoystick.swift in Sources */,
 				01B9325F214D6919004B607D /* ViewController.swift in Sources */,
 				01B9325D214D6919004B607D /* AppDelegate.swift in Sources */,
+				01B93291214DA131004B607D /* NSLayoutConstraint+PureLayout.m in Sources */,
+				01B93292214DA131004B607D /* ALView+PureLayout.m in Sources */,
+				01B93293214DA131004B607D /* NSArray+PureLayout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,6 +346,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = E2383UN8B7;
@@ -280,6 +359,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "f21baa56-b811-4863-9b98-8121503d54a8";
 				PROVISIONING_PROFILE_SPECIFIER = "PremierSoft Wildcard";
+				SWIFT_OBJC_BRIDGING_HEADER = "PegasusApp/PegasusApp-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -289,6 +370,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = PegasusApp/Info.plist;
@@ -299,6 +381,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.premiersoft.ios.PegasusApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "PegasusApp/PegasusApp-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
