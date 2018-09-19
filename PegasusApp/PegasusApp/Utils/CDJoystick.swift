@@ -10,7 +10,7 @@ import UIKit
 
 public struct CDJoystickData: CustomStringConvertible {
 
-    /// (-1.0, -1.0) at bottom left to (1.0, 1.0) at top right
+    /// (-1.0, -1.0) at top left to (1.0, 1.0) at top right
     public var velocity: CGPoint = .zero
 
     /// 0 at top middle to 6.28 radians going around clockwise

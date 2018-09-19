@@ -23,6 +23,8 @@ class ViewController: UIViewController {
 
     private lazy var rightJoystick = CDJoystick()
 
+    private lazy var joystickManager = JoystickManager(self)
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .lightGray
@@ -33,34 +35,33 @@ class ViewController: UIViewController {
         leftJoystick.substrateColor = #colorLiteral(red: 0.7233663201, green: 0.7233663201, blue: 0.7233663201, alpha: 1)
         leftJoystick.substrateBorderColor = #colorLiteral(red: 0.5723067522, green: 0.5723067522, blue: 0.5723067522, alpha: 1)
         leftJoystick.substrateBorderWidth = 1.0
-        leftJoystick.stickSize = CGSize(width: 100, height: 100)
         leftJoystick.stickColor = #colorLiteral(red: 0.4078193307, green: 0.4078193307, blue: 0.4078193307, alpha: 1)
         leftJoystick.stickBorderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         leftJoystick.stickBorderWidth = 2.0
         leftJoystick.fade = 0.5
+        leftJoystick.trackingHandler = joystickManager.leftHandler
         view.addSubview(leftJoystick)
         leftJoystick.autoMatch(.width, to: .height, of: view, withMultiplier: 0.5)
         leftJoystick.autoMatch(.height, to: .height, of: view, withMultiplier: 0.5)
         leftJoystick.autoPinEdge(toSuperviewMargin: .left, withInset: 20)
         leftJoystick.autoPinEdge(toSuperviewMargin: .bottom, withInset: 20)
 
-
         rightJoystick.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
         rightJoystick.substrateColor = #colorLiteral(red: 0.7233663201, green: 0.7233663201, blue: 0.7233663201, alpha: 1)
         rightJoystick.substrateBorderColor = #colorLiteral(red: 0.5723067522, green: 0.5723067522, blue: 0.5723067522, alpha: 1)
         rightJoystick.substrateBorderWidth = 1.0
-        rightJoystick.stickSize = CGSize(width: 100, height: 100)
         rightJoystick.stickColor = #colorLiteral(red: 0.4078193307, green: 0.4078193307, blue: 0.4078193307, alpha: 1)
         rightJoystick.stickBorderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         rightJoystick.stickBorderWidth = 2.0
         rightJoystick.fade = 0.5
+        rightJoystick.trackingHandler = joystickManager.rightHandler
         view.addSubview(rightJoystick)
         rightJoystick.autoMatch(.width, to: .height, of: view, withMultiplier: 0.5)
         rightJoystick.autoMatch(.height, to: .height, of: view, withMultiplier: 0.5)
         rightJoystick.autoPinEdge(toSuperviewMargin: .right, withInset: 20)
         rightJoystick.autoPinEdge(toSuperviewMargin: .bottom, withInset: 20)
 
-        labelYaw.text = "Yaw\n1.25"
+        labelYaw.text = "Yaw\n0"
         labelYaw.textColor = .white
         labelYaw.numberOfLines = 2
         labelYaw.textAlignment = .center
@@ -69,7 +70,7 @@ class ViewController: UIViewController {
         labelYaw.autoPinEdge(.bottom, to: .top, of: leftJoystick, withOffset: -5)
         labelYaw.autoPinEdge(.left, to: .left, of: leftJoystick, withOffset: 15)
 
-        labelThrottle.text = "Thottle\n23%"
+        labelThrottle.text = "Throttle\n0%"
         labelThrottle.textColor = .white
         labelThrottle.numberOfLines = 2
         labelThrottle.textAlignment = .center
@@ -78,7 +79,7 @@ class ViewController: UIViewController {
         labelThrottle.autoPinEdge(.bottom, to: .top, of: leftJoystick, withOffset: -5)
         labelThrottle.autoPinEdge(.right, to: .right, of: leftJoystick, withOffset: -10)
 
-        labelPitch.text = "Pitch\n10.0"
+        labelPitch.text = "Pitch\n0"
         labelPitch.textColor = .white
         labelPitch.numberOfLines = 2
         labelPitch.textAlignment = .center
@@ -87,7 +88,7 @@ class ViewController: UIViewController {
         labelPitch.autoPinEdge(.bottom, to: .top, of: rightJoystick, withOffset: -5)
         labelPitch.autoPinEdge(.left, to: .left, of: rightJoystick, withOffset: 10)
 
-        labelRoll.text = "Roll\n0.5"
+        labelRoll.text = "Roll\n0"
         labelRoll.textColor = .white
         labelRoll.numberOfLines = 2
         labelRoll.textAlignment = .center
@@ -95,6 +96,17 @@ class ViewController: UIViewController {
         view.addSubview(labelRoll)
         labelRoll.autoPinEdge(.bottom, to: .top, of: rightJoystick, withOffset: -5)
         labelRoll.autoPinEdge(.right, to: .right, of: rightJoystick, withOffset: -15)
+    }
+
+    var firstTime = true
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if firstTime {
+            let w = rightJoystick.frame.width/2.5
+            rightJoystick.stickSize = CGSize(width: w, height: w)
+            leftJoystick.stickSize = CGSize(width: w, height: w)
+            firstTime = false
+        }
     }
 
     private func addTopView() {
@@ -138,6 +150,25 @@ class ViewController: UIViewController {
         line.autoPinEdge(toSuperviewEdge: .left)
         line.autoPinEdge(toSuperviewEdge: .right)
         line.autoPinEdge(toSuperviewEdge: .bottom)
+    }
+
+}
+
+extension ViewController: JoystickManagerDelegate {
+    func didChangeThrottle(_ value: CGFloat) {
+        self.labelThrottle.text = "Throttle\n\(Int(value))%"
+    }
+
+    func didChangePitch(_ value: CGFloat) {
+        self.labelPitch.text = "Pitch\n\(Int(value))"
+    }
+
+    func didChangeRoll(_ value: CGFloat) {
+        self.labelRoll.text = "Roll\n\(Int(value))"
+    }
+
+    func didChangeYaw(_ value: CGFloat) {
+        self.labelYaw.text = "Yaw\n\(Int(value))"
     }
 
 }
