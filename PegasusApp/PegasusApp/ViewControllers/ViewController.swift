@@ -13,17 +13,29 @@ class ViewController: UIViewController {
     private lazy var labelNetworkName = UILabel.newAutoLayout()
     private lazy var fieldIP = UITextField.newAutoLayout()
 
+    // MARK: Comands buttons
+    private lazy var btnConnect = UIButton.newAutoLayout()
+    private lazy var btnStart = UIButton.newAutoLayout()
+
+    // MARK: Labels values of the commands
     private lazy var labelThrottle = UILabel.newAutoLayout()
     private lazy var labelYaw = UILabel.newAutoLayout()
-
     private lazy var labelPitch = UILabel.newAutoLayout()
     private lazy var labelRoll = UILabel.newAutoLayout()
 
+    // MARK: Joysticks
     private lazy var leftJoystick = CDJoystick()
-
     private lazy var rightJoystick = CDJoystick()
-
     private lazy var joystickManager = JoystickManager(self)
+
+    // MARK: UDP Client
+    private var client: UDPClient?
+
+    // MARK: Axis values
+    private var throttle: CGFloat = 0.0
+    private var pitch: CGFloat = 0.0
+    private var roll: CGFloat = 0.0
+    private var yaw: CGFloat = 0.0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,6 +108,8 @@ class ViewController: UIViewController {
         view.addSubview(labelRoll)
         labelRoll.autoPinEdge(.bottom, to: .top, of: rightJoystick, withOffset: -5)
         labelRoll.autoPinEdge(.right, to: .right, of: rightJoystick, withOffset: -15)
+
+        addButtons()
     }
 
     var firstTime = true
@@ -105,6 +119,8 @@ class ViewController: UIViewController {
             let w = rightJoystick.frame.width/2.5
             rightJoystick.stickSize = CGSize(width: w, height: w)
             leftJoystick.stickSize = CGSize(width: w, height: w)
+            btnConnect.layer.cornerRadius = btnConnect.frame.height/2
+            btnStart.layer.cornerRadius = btnStart.frame.height/2
             firstTime = false
         }
     }
@@ -152,23 +168,87 @@ class ViewController: UIViewController {
         line.autoPinEdge(toSuperviewEdge: .bottom)
     }
 
+    private func addButtons() {
+        btnConnect.backgroundColor = .blue
+        btnConnect.setTitle("Connect", for: .normal)
+        btnConnect.titleLabel?.font = UIFont.boldSystemFont(ofSize: 26)
+        btnConnect.layer.shadowRadius = 2
+        btnConnect.layer.shadowColor = UIColor.black.cgColor
+        btnConnect.layer.shadowOpacity = 0.2
+        btnConnect.layer.shadowOffset = CGSize(width: 0, height: 3)
+        btnConnect.addTarget(self, action: #selector(connect), for: .touchUpInside)
+        view.addSubview(btnConnect)
+        btnConnect.autoAlignAxis(toSuperviewAxis: .vertical)
+        btnConnect.autoMatch(.height, to: .height, of: leftJoystick, withMultiplier: 0.6)
+        btnConnect.autoMatch(.width, to: .height, of: leftJoystick, withMultiplier: 0.6)
+        btnConnect.autoPinEdge(.top, to: .bottom, of: fieldIP, withOffset: 15)
+
+        btnStart.backgroundColor = .red
+        btnStart.setTitle("Start", for: .normal)
+        btnStart.titleLabel?.font = UIFont.boldSystemFont(ofSize: 26)
+        btnStart.layer.shadowRadius = 2
+        btnStart.layer.shadowColor = UIColor.black.cgColor
+        btnStart.layer.shadowOpacity = 0.2
+        btnStart.layer.shadowOffset = CGSize(width: 0, height: 3)
+        btnStart.addTarget(self, action: #selector(start), for: .touchUpInside)
+        view.addSubview(btnStart)
+        btnStart.autoAlignAxis(toSuperviewAxis: .vertical)
+        btnStart.autoMatch(.height, to: .height, of: leftJoystick, withMultiplier: 0.6)
+        btnStart.autoMatch(.width, to: .height, of: leftJoystick, withMultiplier: 0.6)
+        btnStart.autoPinEdge(.top, to: .bottom, of: btnConnect, withOffset: 15)
+    }
+
 }
 
+// MARK: JoystickManagerDelegate
 extension ViewController: JoystickManagerDelegate {
+
     func didChangeThrottle(_ value: CGFloat) {
         self.labelThrottle.text = "Throttle\n\(Int(value))%"
+        self.throttle = value
+        self.sendComands()
     }
 
     func didChangePitch(_ value: CGFloat) {
         self.labelPitch.text = "Pitch\n\(Int(value))"
+        self.pitch = value
+        self.sendComands()
     }
 
     func didChangeRoll(_ value: CGFloat) {
         self.labelRoll.text = "Roll\n\(Int(value))"
+        self.roll = value
+        self.sendComands()
     }
 
     func didChangeYaw(_ value: CGFloat) {
         self.labelYaw.text = "Yaw\n\(Int(value))"
+        self.yaw = value
+        self.sendComands()
+    }
+}
+
+// MARK: Actions and  UDP Connection
+extension ViewController {
+    @objc private func connect() {
+        print("connect")
+        client = UDPClient.init(address: "192.168.0.7", port: 80)
+        client?.enableBroadcast()
+    }
+
+    @objc private func start() {
+        print("start")
+        let result = client?.send(data: "Iniciar motores".data(using: .utf8) ?? Data())
+        print("Enviou? \(result?.isSuccess ?? false)")
+    }
+
+    private func sendComands() {
+        let fullStr = "T=\(throttle) P=\(pitch) R=\(roll) Y=\(yaw)" + "\n"
+        if let data = fullStr.data(using: .utf8) {
+            let result = client?.send(data: data)
+            print("Enviou? \(result?.isSuccess ?? false)")
+        }
     }
 
 }
+
