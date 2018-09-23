@@ -122,7 +122,6 @@
 			isa = PBXGroup;
 			children = (
 				01B9325E214D6919004B607D /* ViewController.swift */,
-				01F728702151BE3400510A2F /* JoystickManager.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -132,6 +131,7 @@
 			children = (
 				012F279F2150ACF700EE253E /* CDJoystick.swift */,
 				01F728722151C66B00510A2F /* FloatingPoint.swift */,
+				01F728702151BE3400510A2F /* JoystickManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";

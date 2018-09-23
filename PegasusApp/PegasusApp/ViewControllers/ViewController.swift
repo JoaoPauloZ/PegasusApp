@@ -10,6 +10,10 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    // sudo nc -ul 80
+    let ip: String = "192.168.1.100"
+    let port: Int32 = 80
+
     private lazy var labelNetworkName = UILabel.newAutoLayout()
     private lazy var fieldIP = UITextField.newAutoLayout()
 
@@ -231,22 +235,21 @@ extension ViewController: JoystickManagerDelegate {
 // MARK: Actions and  UDP Connection
 extension ViewController {
     @objc private func connect() {
-        print("connect")
-        client = UDPClient.init(address: "192.168.0.7", port: 80)
+        client = UDPClient.init(address: ip, port: port)
         client?.enableBroadcast()
     }
 
     @objc private func start() {
-        print("start")
-        let result = client?.send(data: "Iniciar motores".data(using: .utf8) ?? Data())
-        print("Enviou? \(result?.isSuccess ?? false)")
+        let result = client?.send(data: "start engines".data(using: .utf8) ?? Data())
+        print("Sended: \(result?.isSuccess ?? false)")
     }
 
     private func sendComands() {
-        let fullStr = "T=\(throttle) P=\(pitch) R=\(roll) Y=\(yaw)" + "\n"
+        //let fullStr = "T=\(throttle);P=\(pitch);R=\(roll);Y=\(yaw)"
+        let fullStr = "\(throttle);\(pitch);\(roll);\(yaw);"
         if let data = fullStr.data(using: .utf8) {
             let result = client?.send(data: data)
-            print("Enviou? \(result?.isSuccess ?? false)")
+            print("Sended: \(result?.isSuccess ?? false)")
         }
     }
 
