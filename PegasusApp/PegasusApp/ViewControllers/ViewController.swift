@@ -11,7 +11,7 @@ import UIKit
 class ViewController: UIViewController {
 
     // sudo nc -ul 80
-    let ip: String = "192.168.1.100"
+    let ip: String = "192.168.1.102"
     let port: Int32 = 80
 
     private lazy var labelNetworkName = UILabel.newAutoLayout()
@@ -36,16 +36,26 @@ class ViewController: UIViewController {
     private var client: UDPClient?
 
     // MARK: Axis values
-    private var throttle: CGFloat = 0.0
-    private var pitch: CGFloat = 0.0
-    private var roll: CGFloat = 0.0
-    private var yaw: CGFloat = 0.0
+    private var throttle: Int = 0
+    private var pitch: Int = 0
+    private var roll: Int = 0
+    private var yaw: Int = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .lightGray
+
+        if let bgImage = UIImage(named: "spiration-dark") {
+            view.backgroundColor = UIColor(patternImage: bgImage)
+        } else {
+            view.backgroundColor = .lightGray
+        }
+
+        let value = UIInterfaceOrientation.landscapeRight.rawValue
+        UIDevice.current.setValue(value, forKey: "orientation")
 
         addTopView()
+
+        let margin: CGFloat = 20
 
         leftJoystick.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
         leftJoystick.substrateColor = #colorLiteral(red: 0.7233663201, green: 0.7233663201, blue: 0.7233663201, alpha: 1)
@@ -59,8 +69,8 @@ class ViewController: UIViewController {
         view.addSubview(leftJoystick)
         leftJoystick.autoMatch(.width, to: .height, of: view, withMultiplier: 0.5)
         leftJoystick.autoMatch(.height, to: .height, of: view, withMultiplier: 0.5)
-        leftJoystick.autoPinEdge(toSuperviewMargin: .left, withInset: 20)
-        leftJoystick.autoPinEdge(toSuperviewMargin: .bottom, withInset: 20)
+        leftJoystick.autoPinEdge(toSuperviewMargin: .left, withInset: margin)
+        leftJoystick.autoPinEdge(toSuperviewMargin: .bottom, withInset: margin)
 
         rightJoystick.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
         rightJoystick.substrateColor = #colorLiteral(red: 0.7233663201, green: 0.7233663201, blue: 0.7233663201, alpha: 1)
@@ -74,8 +84,8 @@ class ViewController: UIViewController {
         view.addSubview(rightJoystick)
         rightJoystick.autoMatch(.width, to: .height, of: view, withMultiplier: 0.5)
         rightJoystick.autoMatch(.height, to: .height, of: view, withMultiplier: 0.5)
-        rightJoystick.autoPinEdge(toSuperviewMargin: .right, withInset: 20)
-        rightJoystick.autoPinEdge(toSuperviewMargin: .bottom, withInset: 20)
+        rightJoystick.autoPinEdge(toSuperviewMargin: .right, withInset: margin)
+        rightJoystick.autoPinEdge(toSuperviewMargin: .bottom, withInset: margin)
 
         labelYaw.text = "Yaw\n0"
         labelYaw.textColor = .white
@@ -131,51 +141,30 @@ class ViewController: UIViewController {
 
     private func addTopView() {
 
-        let topView = UIView.newAutoLayout()
-        view.addSubview(topView)
-        topView.autoAlignAxis(toSuperviewAxis: .vertical)
-        topView.autoPinEdge(toSuperviewMargin: .top, withInset: 15)
-
-        let iconNet = UIImageView.newAutoLayout()
-        iconNet.backgroundColor = .green
-        iconNet.contentMode = .center
-        topView.addSubview(iconNet)
-        iconNet.autoSetDimensions(to: CGSize(width: 25, height: 25))
-        iconNet.autoPinEdge(toSuperviewMargin: .left)
-
-        labelNetworkName.text = "T.A.R.D.I.S."
-        labelNetworkName.textColor = .white
-        labelNetworkName.textAlignment = .center
-        labelNetworkName.font = UIFont.boldSystemFont(ofSize: 22)
-        topView.addSubview(labelNetworkName)
-        labelNetworkName.autoPinEdge(.left, to: .right, of: iconNet, withOffset: 10)
-        labelNetworkName.autoPinEdge(toSuperviewEdge: .top, withInset: 5)
-        iconNet.autoAlignAxis(.horizontal, toSameAxisOf: labelNetworkName)
-
         fieldIP.font = UIFont.boldSystemFont(ofSize: 22)
-        fieldIP.placeholder = "192.168.0.100"
+        fieldIP.text = "192.168.1.102"
+        fieldIP.placeholder = "192.168.0.0"
         fieldIP.keyboardType = .numberPad
         fieldIP.textAlignment = .center
         fieldIP.textColor = .white
-        topView.addSubview(fieldIP)
-        fieldIP.autoPinEdge(.top, to: .bottom, of: iconNet, withOffset: 10)
-        fieldIP.autoPinEdge(toSuperviewEdge: .left)
-        fieldIP.autoPinEdge(toSuperviewEdge: .right)
-        fieldIP.autoPinEdge(toSuperviewEdge: .bottom, withInset: 5)
+        view.addSubview(fieldIP)
+        fieldIP.autoSetDimension(.width, toSize: 200)
+        fieldIP.autoAlignAxis(toSuperviewAxis: .vertical)
+        fieldIP.autoPinEdge(toSuperviewEdge: .top, withInset: 25)
 
         let line = UIView.newAutoLayout()
         line.backgroundColor = .gray
-        topView.addSubview(line)
+        view.addSubview(line)
         line.autoSetDimension(.height, toSize: 1)
-        line.autoPinEdge(toSuperviewEdge: .left)
-        line.autoPinEdge(toSuperviewEdge: .right)
-        line.autoPinEdge(toSuperviewEdge: .bottom)
+        line.autoPinEdge(.left, to: .left, of: fieldIP)
+        line.autoPinEdge(.right, to: .right, of: fieldIP)
+        line.autoPinEdge(.top, to: .bottom, of: fieldIP)
     }
 
     private func addButtons() {
         btnConnect.backgroundColor = .blue
         btnConnect.setTitle("Connect", for: .normal)
-        btnConnect.titleLabel?.font = UIFont.boldSystemFont(ofSize: 26)
+        btnConnect.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
         btnConnect.layer.shadowRadius = 2
         btnConnect.layer.shadowColor = UIColor.black.cgColor
         btnConnect.layer.shadowOpacity = 0.2
@@ -183,13 +172,12 @@ class ViewController: UIViewController {
         btnConnect.addTarget(self, action: #selector(connect), for: .touchUpInside)
         view.addSubview(btnConnect)
         btnConnect.autoAlignAxis(toSuperviewAxis: .vertical)
-        btnConnect.autoMatch(.height, to: .height, of: leftJoystick, withMultiplier: 0.6)
-        btnConnect.autoMatch(.width, to: .height, of: leftJoystick, withMultiplier: 0.6)
-        btnConnect.autoPinEdge(.top, to: .bottom, of: fieldIP, withOffset: 15)
+        btnConnect.autoSetDimensions(to: CGSize(width: 100, height: 100))
+        btnConnect.autoPinEdge(.top, to: .bottom, of: fieldIP, withOffset: 25)
 
         btnStart.backgroundColor = .red
         btnStart.setTitle("Start", for: .normal)
-        btnStart.titleLabel?.font = UIFont.boldSystemFont(ofSize: 26)
+        btnStart.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
         btnStart.layer.shadowRadius = 2
         btnStart.layer.shadowColor = UIColor.black.cgColor
         btnStart.layer.shadowOpacity = 0.2
@@ -197,8 +185,7 @@ class ViewController: UIViewController {
         btnStart.addTarget(self, action: #selector(start), for: .touchUpInside)
         view.addSubview(btnStart)
         btnStart.autoAlignAxis(toSuperviewAxis: .vertical)
-        btnStart.autoMatch(.height, to: .height, of: leftJoystick, withMultiplier: 0.6)
-        btnStart.autoMatch(.width, to: .height, of: leftJoystick, withMultiplier: 0.6)
+        btnStart.autoSetDimensions(to: CGSize(width: 100, height: 100))
         btnStart.autoPinEdge(.top, to: .bottom, of: btnConnect, withOffset: 15)
     }
 
@@ -208,27 +195,39 @@ class ViewController: UIViewController {
 extension ViewController: JoystickManagerDelegate {
 
     func didChangeThrottle(_ value: CGFloat) {
-        self.labelThrottle.text = "Throttle\n\(Int(value))%"
-        self.throttle = value
-        self.sendComands()
+        let iValue = Int(value)
+        if iValue != self.throttle {
+            self.throttle = iValue
+            self.labelThrottle.text = "Throttle\n\(self.throttle)%"
+            self.sendComands()
+        }
     }
 
     func didChangePitch(_ value: CGFloat) {
-        self.labelPitch.text = "Pitch\n\(Int(value))"
-        self.pitch = value
-        self.sendComands()
+        let iValue = Int(value)
+        if iValue != self.pitch {
+            self.pitch = iValue
+            self.labelPitch.text = "Pitch\n\(self.pitch)"
+            self.sendComands()
+        }
     }
 
     func didChangeRoll(_ value: CGFloat) {
-        self.labelRoll.text = "Roll\n\(Int(value))"
-        self.roll = value
-        self.sendComands()
+        let iValue = Int(value)
+        if iValue != self.roll {
+            self.roll = iValue
+            self.labelRoll.text = "Roll\n\(self.roll)"
+            self.sendComands()
+        }
     }
 
     func didChangeYaw(_ value: CGFloat) {
-        self.labelYaw.text = "Yaw\n\(Int(value))"
-        self.yaw = value
-        self.sendComands()
+        let iValue = Int(value)
+        if iValue != self.yaw {
+            self.yaw = iValue
+            self.labelYaw.text = "Yaw\n\(self.yaw)"
+            self.sendComands()
+        }
     }
 }
 
@@ -237,6 +236,7 @@ extension ViewController {
     @objc private func connect() {
         client = UDPClient.init(address: ip, port: port)
         client?.enableBroadcast()
+        // enviar um comando e ver se deu success
     }
 
     @objc private func start() {
@@ -246,12 +246,23 @@ extension ViewController {
 
     private func sendComands() {
         //let fullStr = "T=\(throttle);P=\(pitch);R=\(roll);Y=\(yaw)"
-        let fullStr = "\(throttle);\(pitch);\(roll);\(yaw);"
+        let fullStr = "C\(throttle);\(pitch);\(roll);\(yaw);"
+        print(fullStr)
         if let data = fullStr.data(using: .utf8) {
             let result = client?.send(data: data)
             print("Sended: \(result?.isSuccess ?? false)")
         }
     }
+}
 
+// MARK: UI Interface Orientation
+extension ViewController {
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .landscape
+    }
+
+    override var shouldAutorotate: Bool {
+        return true
+    }
 }
 
