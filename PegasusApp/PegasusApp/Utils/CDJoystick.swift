@@ -41,13 +41,14 @@ public class CDJoystick: UIView {
     private var stickView = UIView(frame: .zero)
     private var displayLink: CADisplayLink?
 
-    private var tracking = false {
-        didSet {
-            UIView.animate(withDuration: 0.25) {
-                self.alpha = self.tracking ? 1.0 : self.fade
-            }
-        }
-    }
+    private var tracking = false
+//    {
+//        didSet {
+//            UIView.animate(withDuration: 0.25) {
+//                self.alpha = self.tracking ? 1.0 : self.fade
+//            }
+//        }
+//    }
 
     override public init(frame: CGRect) {
         super.init(frame: frame)

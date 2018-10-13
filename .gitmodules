@@ -4,3 +4,9 @@
 [submodule "Submodules/SwiftSocket"]
 	path = Submodules/SwiftSocket
 	url = https://github.com/swiftsocket/SwiftSocket.git
+[submodule "Submodules/TPKeyboardAvoiding"]
+	path = Submodules/TPKeyboardAvoiding
+	url = https://github.com/michaeltyson/TPKeyboardAvoiding.git
+[submodule "Submodules/JVFloatLabeledTextField"]
+	path = Submodules/JVFloatLabeledTextField
+	url = https://github.com/jverdi/JVFloatLabeledTextField.git
