@@ -11,7 +11,15 @@ import UIKit
 class ViewController: UIViewController {
 
     // sudo nc -ul 80
-    let ip: String = "192.168.1.101"
+
+    private var ip: String? {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "ip")
+        }
+        get {
+            return UserDefaults.standard.string(forKey: "ip")
+        }
+    }
     let port: Int32 = 80
 
     private lazy var fieldIP = FloatingTextField.newAutoLayout()
@@ -58,6 +66,11 @@ class ViewController: UIViewController {
         toggleJoysticks(enabled: false)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        showSettings()
+    }
+
     var firstTime = true
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -84,6 +97,13 @@ class ViewController: UIViewController {
             self.rightJoystick.fade = enabled ? 0.5 : 0.2
             self.rightJoystick.isUserInteractionEnabled = enabled
         }
+    }
+
+    @objc private func showSettings() {
+        let vc = SettingsViewController()
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalTransitionStyle = .crossDissolve
+        present(nav, animated: true, completion: nil)
     }
 
 }
@@ -163,16 +183,15 @@ extension ViewController {
 
     private func addIpField() {
         fieldIP.placeholder = "Endereço IP"
+        fieldIP.text = ip
         fieldIP.delegate = self
-        fieldIP.textAlignment = .center
+        fieldIP.textAlignment = .right
         fieldIP.returnKeyType = .done
-        fieldIP.autocorrectionType = .no
         fieldIP.keyboardType = .numbersAndPunctuation
         fieldIP.addTarget(nil, action: #selector(resignFirstResponder), for: .editingDidEndOnExit)
         view.addSubview(fieldIP)
-        fieldIP.autoSetDimension(.width, toSize: 200)
-        fieldIP.autoAlignAxis(toSuperviewAxis: .vertical)
-        fieldIP.autoPinEdge(toSuperviewEdge: .top, withInset: 25)
+        fieldIP.autoPinEdge(toSuperviewSafeArea: .right, withInset: 10)
+        fieldIP.autoPinEdge(toSuperviewSafeArea: .top, withInset: 10)
     }
 
     private func addButtons() {
@@ -206,7 +225,8 @@ extension ViewController {
     private func addSettingsButton() {
         let btn = UIButton.newAutoLayout()
         btn.setImage(UIImage(named: "ic_settings")?.withRenderingMode(.alwaysTemplate), for: .normal)
-        btn.tintColor = .white
+        btn.tintColor = .pegasusGreen
+        btn.addTarget(self, action: #selector(showSettings), for: .touchUpInside)
         view.addSubview(btn)
         btn.autoSetDimensions(to: CGSize(width: 45, height: 45))
         btn.autoPinEdge(toSuperviewMargin: .top, withInset: 10)
@@ -259,6 +279,7 @@ extension ViewController: JoystickManagerDelegate {
 extension ViewController {
 
     @objc private func connect() {
+        guard let ip = self.ip else { return }
         client = UDPClient.init(address: ip, port: port)
         client?.enableBroadcast()
         // enviar um comando e ver se deu success
@@ -286,7 +307,7 @@ extension ViewController {
 extension ViewController: UITextFieldDelegate {
 
     func textFieldDidEndEditing(_ textField: UITextField) {
-
+        self.ip = textField.text
     }
 
 }
@@ -299,7 +320,7 @@ extension ViewController {
     }
 
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return .landscapeLeft
+        return .landscapeRight
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -310,4 +331,3 @@ extension ViewController {
         return true
     }
 }
-
