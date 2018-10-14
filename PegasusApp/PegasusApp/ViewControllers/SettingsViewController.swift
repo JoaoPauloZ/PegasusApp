@@ -10,29 +10,11 @@ import UIKit
 
 class SettingsViewController: UIViewController {
 
+    private lazy var contentView = UIView.newAutoLayout()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let bgImage = UIImage(named: "spiration-dark") {
-            view.backgroundColor = UIColor(patternImage: bgImage)
-        } else {
-            view.backgroundColor = .lightGray
-        }
-
-        let value = UIInterfaceOrientation.portrait.rawValue
-        UIDevice.current.setValue(value, forKey: "orientation")
     }
     
-}
-
-// MARK: UI Interface Orientation
-extension SettingsViewController {
-
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
-
-    override var shouldAutorotate: Bool {
-        return false
-    }
 }
