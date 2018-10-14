@@ -65,12 +65,7 @@ class ViewController: UIViewController {
 
         toggleJoysticks(enabled: false)
     }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        showSettings()
-    }
-
+    
     var firstTime = true
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()

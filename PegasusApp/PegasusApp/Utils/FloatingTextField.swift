@@ -47,7 +47,7 @@ class FloatingTextField: JVFloatLabeledTextField {
 
         self.floatingLabelTextColor = .pegasusGreen
         self.floatingLabelActiveTextColor = .pegasusGreen
-        self.floatingLabelFont = UIFont.semiBold(ofSize: 13)
+        self.floatingLabelFont = UIFont.semiBold(ofSize: 14)
         self.font = UIFont.regular(ofSize: 22)
         self.keyboardAppearance = .dark
         self.autocorrectionType = .no

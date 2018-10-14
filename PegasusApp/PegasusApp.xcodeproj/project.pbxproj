@@ -27,6 +27,7 @@
 		01DA2BB32173864F00B33FFA /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DA2BAD2173864F00B33FFA /* TPKeyboardAvoidingTableView.m */; };
 		01DA2BB42173864F00B33FFA /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DA2BAE2173864F00B33FFA /* TPKeyboardAvoidingScrollView.m */; };
 		01DA2BB52173864F00B33FFA /* TPKeyboardAvoidingCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DA2BB02173864F00B33FFA /* TPKeyboardAvoidingCollectionView.m */; };
+		01DA2BB92173B9AC00B33FFA /* MotorSettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DA2BB82173B9AC00B33FFA /* MotorSettingsCell.swift */; };
 		01E3BF1C217274E900399F84 /* FloatingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E3BF1B217274E900399F84 /* FloatingTextField.swift */; };
 		01E3BF1F2172761600399F84 /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E3BF1E2172761600399F84 /* UIFont.swift */; };
 		01E3BF212172764500399F84 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E3BF202172764500399F84 /* UIColor.swift */; };
@@ -84,6 +85,7 @@
 		01DA2BAF2173864F00B33FFA /* UIScrollView+TPKeyboardAvoidingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+TPKeyboardAvoidingAdditions.h"; sourceTree = "<group>"; };
 		01DA2BB02173864F00B33FFA /* TPKeyboardAvoidingCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingCollectionView.m; sourceTree = "<group>"; };
 		01DA2BB12173864F00B33FFA /* TPKeyboardAvoidingTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingTableView.h; sourceTree = "<group>"; };
+		01DA2BB82173B9AC00B33FFA /* MotorSettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MotorSettingsCell.swift; path = Cells/MotorSettingsCell.swift; sourceTree = "<group>"; };
 		01E3BF1B217274E900399F84 /* FloatingTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingTextField.swift; sourceTree = "<group>"; };
 		01E3BF1E2172761600399F84 /* UIFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		01E3BF202172764500399F84 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 			children = (
 				01B9325E214D6919004B607D /* ViewController.swift */,
 				0194950321715D780079DBE2 /* SettingsViewController.swift */,
+				01DA2BB82173B9AC00B33FFA /* MotorSettingsCell.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -321,6 +324,7 @@
 				01DA2B9D2173860000B33FFA /* NSLayoutConstraint+PureLayout.m in Sources */,
 				01DA2B92217385ED00B33FFA /* JVFloatLabeledTextView.m in Sources */,
 				01DA2B90217385ED00B33FFA /* NSString+TextDirectionality.m in Sources */,
+				01DA2BB92173B9AC00B33FFA /* MotorSettingsCell.swift in Sources */,
 				01DA2B9F2173860000B33FFA /* NSArray+PureLayout.m in Sources */,
 				01DA2BB42173864F00B33FFA /* TPKeyboardAvoidingScrollView.m in Sources */,
 				01DA2BA72173863000B33FFA /* Socket.swift in Sources */,
