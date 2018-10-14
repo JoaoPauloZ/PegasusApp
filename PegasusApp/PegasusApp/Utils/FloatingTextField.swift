@@ -29,8 +29,8 @@ class FloatingTextField: JVFloatLabeledTextField {
     override var placeholder: String? {
         didSet {
             let attr = [
-                NSAttributedStringKey.font: UIFont.semiBold(ofSize: 15),
-                NSAttributedStringKey.foregroundColor: UIColor.darkGray
+                NSAttributedStringKey.font: UIFont.regular(ofSize: 22),
+                NSAttributedStringKey.foregroundColor: UIColor.lightGray
             ]
             self.attributedPlaceholder = NSAttributedString(string: placeholder ?? "", attributes: attr)
         }
@@ -45,13 +45,13 @@ class FloatingTextField: JVFloatLabeledTextField {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.floatingLabelTextColor = .dark2
-        self.floatingLabelActiveTextColor = .secundaryColor
+        self.floatingLabelTextColor = .pegasusGreen
+        self.floatingLabelActiveTextColor = .pegasusGreen
         self.floatingLabelFont = UIFont.semiBold(ofSize: 13)
-        self.font = UIFont.regular(ofSize: 15)
-        self.textColor = .light1
+        self.font = UIFont.regular(ofSize: 22)
+        self.textColor = .white
         self.keyboardAppearance = .dark
-        line.backgroundColor = .dark2
+        line.backgroundColor = .pegasusDarkGray
         self.addSubview(line)
         line.autoSetDimension(.height, toSize: 1)
         line.autoPinEdge(toSuperviewEdge: .left)

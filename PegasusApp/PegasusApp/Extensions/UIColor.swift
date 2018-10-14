@@ -8,35 +8,26 @@
 
 import UIKit
 
+// http://paletton.com/#uid=72Q0I0krB++aJ+qkb+SIP+MWD-3
+
 extension UIColor {
 
     open class var contentBgDark: UIColor {
         return UIColor(hex: "201E1E")
     }
 
-    open class var primaryColor: UIColor {
-        return UIColor(hex: "00F41E")
+    open class var pegasusGreen: UIColor {
+        return UIColor(hex: "22ff36")
     }
 
-    open class var secundaryColor: UIColor {
-        return UIColor(hex: "0265b2")
+    open class var pegasusBlue: UIColor {
+        return UIColor(hex: "0A8FFE")
     }
 
-    open class var light1: UIColor {
-        return UIColor(hex: "FFFFFF")
+    open class var pegasusDarkGray: UIColor {
+        return UIColor(hex: "686868")
     }
 
-    open class var light2: UIColor {
-        return UIColor(hex: "FCFCFC")
-    }
-
-    open class var dark1: UIColor {
-        return UIColor(hex: "201E1E")
-    }
-
-    open class var dark2: UIColor {
-        return UIColor(hex: "595454")
-    }
 
     convenience init(hex: String) {
         let scanner = Scanner(string: hex)

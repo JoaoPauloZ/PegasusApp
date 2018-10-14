@@ -14,8 +14,7 @@ class ViewController: UIViewController {
     let ip: String = "192.168.1.101"
     let port: Int32 = 80
 
-    private lazy var labelNetworkName = UILabel.newAutoLayout()
-    private lazy var fieldIP = UITextField.newAutoLayout()
+    private lazy var fieldIP = FloatingTextField.newAutoLayout()
 
     // MARK: Comands buttons
     private lazy var btnConnect = UIButton.newAutoLayout()
@@ -50,38 +49,49 @@ class ViewController: UIViewController {
             view.backgroundColor = .lightGray
         }
 
-        addTopView()
+        addSettingsButton()
+        addIpField()
+        addJoysticks()
+        addLabels()
+        addButtons()
 
-        let margin: CGFloat = 20
+        toggleJoysticks(enabled: false)
+    }
 
-        leftJoystick.backgroundColor = .clear
-        leftJoystick.substrateColor = UIColor(white: 1, alpha: 0.5)
-        leftJoystick.substrateBorderColor = UIColor(hex: "22ff36")
-        leftJoystick.substrateBorderWidth = 2.0
-        leftJoystick.stickColor = UIColor.init(hex: "686868")
-        leftJoystick.stickBorderColor = .black
-        leftJoystick.stickBorderWidth = 1.0
-        leftJoystick.trackingHandler = joystickManager.leftHandler
-        view.addSubview(leftJoystick)
-        leftJoystick.autoMatch(.width, to: .height, of: view, withMultiplier: 0.5)
-        leftJoystick.autoMatch(.height, to: .height, of: view, withMultiplier: 0.5)
-        leftJoystick.autoPinEdge(toSuperviewMargin: .left, withInset: margin)
-        leftJoystick.autoPinEdge(toSuperviewMargin: .bottom, withInset: margin)
+    var firstTime = true
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if firstTime {
+            let w = rightJoystick.frame.width/2.5
+            rightJoystick.stickSize = CGSize(width: w, height: w)
+            leftJoystick.stickSize = CGSize(width: w, height: w)
+            btnConnect.layer.cornerRadius = btnConnect.frame.height/2
+            btnStart.layer.cornerRadius = btnStart.frame.height/2
+            firstTime = false
+        }
+    }
 
-        rightJoystick.backgroundColor = .clear
-        rightJoystick.substrateColor = UIColor.init(white: 1, alpha: 0.5)
-        rightJoystick.substrateBorderColor = UIColor.init(hex: "0A8FFE")
-        rightJoystick.substrateBorderWidth = 2.0
-        rightJoystick.stickColor = UIColor.init(hex: "686868")
-        rightJoystick.stickBorderColor = .black
-        rightJoystick.stickBorderWidth = 1.0
-        rightJoystick.trackingHandler = joystickManager.rightHandler
-        view.addSubview(rightJoystick)
-        rightJoystick.autoMatch(.width, to: .height, of: view, withMultiplier: 0.5)
-        rightJoystick.autoMatch(.height, to: .height, of: view, withMultiplier: 0.5)
-        rightJoystick.autoPinEdge(toSuperviewMargin: .right, withInset: margin)
-        rightJoystick.autoPinEdge(toSuperviewMargin: .bottom, withInset: margin)
+    private func toggleJoysticks(enabled: Bool) {
+        let alpha: CGFloat = enabled ? 1.0 : 0.0
+        UIView.animate(withDuration: 0.3) {
+            self.labelYaw.alpha = alpha
+            self.labelThrottle.alpha = alpha
+            self.labelPitch.alpha = alpha
+            self.labelRoll.alpha = alpha
 
+            self.leftJoystick.fade = enabled ? 0.5 : 0.2
+            self.leftJoystick.isUserInteractionEnabled = enabled
+            self.rightJoystick.fade = enabled ? 0.5 : 0.2
+            self.rightJoystick.isUserInteractionEnabled = enabled
+        }
+    }
+
+}
+
+// MARK: Layout
+extension ViewController {
+
+    private func addLabels() {
         labelYaw.text = "Yaw\n0"
         labelYaw.textColor = .white
         labelYaw.numberOfLines = 2
@@ -117,43 +127,52 @@ class ViewController: UIViewController {
         view.addSubview(labelRoll)
         labelRoll.autoPinEdge(.bottom, to: .top, of: rightJoystick, withOffset: -5)
         labelRoll.autoPinEdge(.right, to: .right, of: rightJoystick, withOffset: -15)
-
-        addButtons()
-        addSettingsButton()
     }
 
-    var firstTime = true
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        if firstTime {
-            let w = rightJoystick.frame.width/2.5
-            rightJoystick.stickSize = CGSize(width: w, height: w)
-            leftJoystick.stickSize = CGSize(width: w, height: w)
-            btnConnect.layer.cornerRadius = btnConnect.frame.height/2
-            btnStart.layer.cornerRadius = btnStart.frame.height/2
-            firstTime = false
-        }
+    private func addJoysticks() {
+        let margin: CGFloat = 20
+        leftJoystick.isUserInteractionEnabled = false
+        leftJoystick.backgroundColor = .clear
+        leftJoystick.substrateColor = UIColor(white: 1, alpha: 0.5)
+        leftJoystick.substrateBorderColor = .pegasusGreen
+        leftJoystick.substrateBorderWidth = 2.0
+        leftJoystick.stickColor = .pegasusDarkGray
+        leftJoystick.stickBorderColor = .black
+        leftJoystick.stickBorderWidth = 1.0
+        leftJoystick.trackingHandler = joystickManager.leftHandler
+        view.addSubview(leftJoystick)
+        leftJoystick.autoMatch(.width, to: .height, of: view, withMultiplier: 0.5)
+        leftJoystick.autoMatch(.height, to: .height, of: view, withMultiplier: 0.5)
+        leftJoystick.autoPinEdge(toSuperviewMargin: .left, withInset: margin)
+        leftJoystick.autoPinEdge(toSuperviewMargin: .bottom, withInset: margin)
+
+        rightJoystick.backgroundColor = .clear
+        rightJoystick.substrateColor = UIColor(white: 1, alpha: 0.5)
+        rightJoystick.substrateBorderColor = .pegasusGreen
+        rightJoystick.substrateBorderWidth = 2.0
+        rightJoystick.stickColor = .pegasusDarkGray
+        rightJoystick.stickBorderColor = .black
+        rightJoystick.stickBorderWidth = 1.0
+        rightJoystick.trackingHandler = joystickManager.rightHandler
+        view.addSubview(rightJoystick)
+        rightJoystick.autoMatch(.width, to: .height, of: view, withMultiplier: 0.5)
+        rightJoystick.autoMatch(.height, to: .height, of: view, withMultiplier: 0.5)
+        rightJoystick.autoPinEdge(toSuperviewMargin: .right, withInset: margin)
+        rightJoystick.autoPinEdge(toSuperviewMargin: .bottom, withInset: margin)
     }
 
-    private func addTopView() {
-        fieldIP.font = UIFont.boldSystemFont(ofSize: 22)
-        fieldIP.text = ip
-        fieldIP.placeholder = "192.168.0.0"
-        fieldIP.keyboardType = .numberPad
+    private func addIpField() {
+        fieldIP.placeholder = "Endereço IP"
+        fieldIP.delegate = self
         fieldIP.textAlignment = .center
-        fieldIP.textColor = .white
+        fieldIP.returnKeyType = .done
+        fieldIP.autocorrectionType = .no
+        fieldIP.keyboardType = .numbersAndPunctuation
+        fieldIP.addTarget(nil, action: #selector(resignFirstResponder), for: .editingDidEndOnExit)
         view.addSubview(fieldIP)
         fieldIP.autoSetDimension(.width, toSize: 200)
         fieldIP.autoAlignAxis(toSuperviewAxis: .vertical)
         fieldIP.autoPinEdge(toSuperviewEdge: .top, withInset: 25)
-
-        let line = UIView.newAutoLayout()
-        line.backgroundColor = .gray
-        view.addSubview(line)
-        line.autoSetDimension(.height, toSize: 1)
-        line.autoPinEdge(.left, to: .left, of: fieldIP)
-        line.autoPinEdge(.right, to: .right, of: fieldIP)
-        line.autoPinEdge(.top, to: .bottom, of: fieldIP)
     }
 
     private func addButtons() {
@@ -186,13 +205,13 @@ class ViewController: UIViewController {
 
     private func addSettingsButton() {
         let btn = UIButton.newAutoLayout()
-        btn.backgroundColor = UIColor(hex: "22ff36")//.primaryColor
+        btn.setImage(UIImage(named: "ic_settings")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        btn.tintColor = .white
         view.addSubview(btn)
         btn.autoSetDimensions(to: CGSize(width: 45, height: 45))
         btn.autoPinEdge(toSuperviewMargin: .top, withInset: 10)
         btn.autoPinEdge(toSuperviewEdge: .left, withInset: 10)
     }
-
 }
 
 // MARK: JoystickManagerDelegate
@@ -236,13 +255,14 @@ extension ViewController: JoystickManagerDelegate {
 
 }
 
-// MARK: Actions and  UDP Connection
+// MARK: Actions and UDP Connection
 extension ViewController {
 
     @objc private func connect() {
         client = UDPClient.init(address: ip, port: port)
         client?.enableBroadcast()
         // enviar um comando e ver se deu success
+        self.toggleJoysticks(enabled: true)
     }
 
     @objc private func start() {
@@ -262,8 +282,21 @@ extension ViewController {
 
 }
 
+// MARK: UITextFliedDelegate
+extension ViewController: UITextFieldDelegate {
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+
+    }
+
+}
+
 // MARK: UI Interface Orientation
 extension ViewController {
+
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
 
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return .landscapeLeft
