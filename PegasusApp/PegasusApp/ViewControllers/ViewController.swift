@@ -65,7 +65,7 @@ class ViewController: UIViewController {
 
         toggleJoysticks(enabled: false)
     }
-    
+
     var firstTime = true
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -282,7 +282,8 @@ extension ViewController {
     }
 
     @objc private func start() {
-        let result = client?.send(data: "start engines".data(using: .utf8) ?? Data())
+        let test = "U30;66;100;&65;65;100;&10;66;110;&50;77;130;&"
+        let result = client?.send(data: test.data(using: .utf8) ?? Data())
         print("Sended: \(result?.isSuccess ?? false)")
     }
 
