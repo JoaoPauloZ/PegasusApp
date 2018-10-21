@@ -13,6 +13,8 @@ class SettingsViewController: UIViewController {
     private var collectionView: TPKeyboardAvoidingCollectionView!
     private lazy var flowLayout = UICollectionViewFlowLayout()
 
+    var preferences: [MotorPreference] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -24,6 +26,7 @@ class SettingsViewController: UIViewController {
 
         setupNavigationBar()
         addCollectionView()
+        loadLocalPreferences()
 
     }
 
@@ -72,13 +75,43 @@ class SettingsViewController: UIViewController {
 
 extension SettingsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
+        return preferences.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MotorSettingsCell.reuseId, for: indexPath) as? MotorSettingsCell
-        cell?.titleLabel.text = "Motor \(indexPath.row)"
+
         return cell ?? MotorSettingsCell()
+    }
+
+}
+
+extension SettingsViewController {
+
+    private func loadLocalPreferences() {
+        let defaults = UserDefaults.standard
+        if let data = defaults.data(forKey: "motorsPreferences") {
+            if let dicArray = data.jsonArray {
+                preferences = dicArray.map { dic -> MotorPreference in
+                    return MotorPreference(dic)
+                }
+            }
+        } else {
+            preferences.append(MotorPreference())
+            preferences.append(MotorPreference())
+            preferences.append(MotorPreference())
+            preferences.append(MotorPreference())
+        }
+    }
+
+    private func saveLocalPreferences() {
+        let dicArray = preferences.map { motorPref -> [String: Any] in
+            return motorPref.json
+        }
+        if let data = try? JSONSerialization.data(withJSONObject: dicArray, options: .prettyPrinted) {
+            let defaults = UserDefaults.standard
+            defaults.set(data, forKey: "motorsPreferences")
+        }
     }
 
 }

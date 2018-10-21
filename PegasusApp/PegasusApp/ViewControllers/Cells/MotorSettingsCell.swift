@@ -12,9 +12,26 @@ class MotorSettingsCell: UICollectionViewCell {
 
     static let reuseId: String = "MotorSettingsCell"
 
-    lazy var titleLabel = UILabel.newAutoLayout()
-    lazy var minSpeedField = FloatingTextField.newAutoLayout()
-    lazy var maxSpeedField = FloatingTextField.newAutoLayout()
+    private lazy var titleLabel = UILabel.newAutoLayout()
+    private lazy var increaseField = FloatingTextField.newAutoLayout()
+    private lazy var minSpeedField = FloatingTextField.newAutoLayout()
+    private lazy var maxSpeedField = FloatingTextField.newAutoLayout()
+
+    var motorIndex: Int = -1 {
+        didSet {
+            titleLabel.text = "Motor \(motorIndex)"
+        }
+    }
+
+    var motorPref: MotorPreference? {
+        didSet {
+            if let pref = self.motorPref {
+                minSpeedField.text = String(pref.minAngleESC)
+                maxSpeedField.text = String(pref.maxAngleESC)
+                increaseField.text = String(pref.increaseValue)
+            }
+        }
+    }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -27,9 +44,9 @@ class MotorSettingsCell: UICollectionViewCell {
         self.layer.borderColor = UIColor.pegasusGreen.cgColor
         self.layer.cornerRadius = 8
         self.layer.borderWidth = 2
-        self.layer.shadowRadius = 8
+        self.layer.shadowRadius = 3
         self.layer.shadowColor = UIColor.pegasusGreen.cgColor
-        self.layer.shadowOpacity = 0.5
+        self.layer.shadowOpacity = 0.3
         self.layer.shadowOffset = CGSize.init(width: 0, height: 0)
 
         addLabelTitle()
@@ -44,20 +61,26 @@ class MotorSettingsCell: UICollectionViewCell {
 
         minSpeedField.floatingLabel.text = "Potência mínima"
         minSpeedField.alwaysShowFloatingLabel = true
-        minSpeedField.textAlignment = .right
         minSpeedField.keyboardType = .numbersAndPunctuation
-        minSpeedField.autoSetDimension(.width, toSize: 50)
         contentView.addSubview(minSpeedField)
-        minSpeedField.autoPinEdge(.top, to: .bottom, of: titleLabel, withOffset: 10)
-        minSpeedField.autoPinEdge(toSuperviewEdge: .right, withInset: 25)
+        minSpeedField.autoMatch(.width, to: .width, of: minSpeedField.floatingLabel)
+        minSpeedField.autoPinEdge(.top, to: .bottom, of: titleLabel, withOffset: 20)
+        minSpeedField.autoPinEdge(.left, to: .left, of: titleLabel)
 
         maxSpeedField.floatingLabel.text = "Potência máxima"
         maxSpeedField.alwaysShowFloatingLabel = true
-        maxSpeedField.textAlignment = .right
         maxSpeedField.keyboardType = .numbersAndPunctuation
-        maxSpeedField.autoSetDimension(.width, toSize: 50)
         contentView.addSubview(maxSpeedField)
-        maxSpeedField.autoPinEdge(.top, to: .bottom, of: minSpeedField, withOffset: 20)
-        maxSpeedField.autoPinEdge(toSuperviewEdge: .right, withInset: 25)
+        maxSpeedField.autoMatch(.width, to: .width, of: maxSpeedField.floatingLabel)
+        maxSpeedField.autoPinEdge(.top, to: .bottom, of: titleLabel, withOffset: 20)
+        maxSpeedField.autoPinEdge(.left, to: .right, of: minSpeedField, withOffset: 20)
+
+        increaseField.floatingLabel.text = "Incremento"
+        increaseField.alwaysShowFloatingLabel = true
+        increaseField.keyboardType = .numbersAndPunctuation
+        contentView.addSubview(increaseField)
+        increaseField.autoMatch(.width, to: .width, of: increaseField.floatingLabel)
+        increaseField.autoPinEdge(.top, to: .bottom, of: minSpeedField, withOffset: 15)
+        increaseField.autoPinEdge(.left, to: .left, of: titleLabel)
     }
 }

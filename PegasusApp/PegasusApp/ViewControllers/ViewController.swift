@@ -48,6 +48,8 @@ class ViewController: UIViewController {
     private var roll: Int = 0
     private var yaw: Int = 0
 
+    private var minValue: Int = 20
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -203,18 +205,18 @@ extension ViewController {
         btnConnect.autoSetDimensions(to: CGSize(width: 100, height: 100))
         btnConnect.autoPinEdge(.top, to: .bottom, of: fieldIP, withOffset: 25)
 
-        btnStart.backgroundColor = .red
-        btnStart.setTitle("Start", for: .normal)
-        btnStart.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
-        btnStart.layer.shadowRadius = 2
-        btnStart.layer.shadowColor = UIColor.black.cgColor
-        btnStart.layer.shadowOpacity = 0.2
-        btnStart.layer.shadowOffset = CGSize(width: 0, height: 3)
-        btnStart.addTarget(self, action: #selector(start), for: .touchUpInside)
-        view.addSubview(btnStart)
-        btnStart.autoAlignAxis(toSuperviewAxis: .vertical)
-        btnStart.autoSetDimensions(to: CGSize(width: 100, height: 100))
-        btnStart.autoPinEdge(.top, to: .bottom, of: btnConnect, withOffset: 15)
+//        btnStart.backgroundColor = .red
+//        btnStart.setTitle("Start", for: .normal)
+//        btnStart.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+//        btnStart.layer.shadowRadius = 2
+//        btnStart.layer.shadowColor = UIColor.black.cgColor
+//        btnStart.layer.shadowOpacity = 0.2
+//        btnStart.layer.shadowOffset = CGSize(width: 0, height: 3)
+//        btnStart.addTarget(self, action: #selector(start), for: .touchUpInside)
+//        view.addSubview(btnStart)
+//        btnStart.autoAlignAxis(toSuperviewAxis: .vertical)
+//        btnStart.autoSetDimensions(to: CGSize(width: 100, height: 100))
+//        btnStart.autoPinEdge(.top, to: .bottom, of: btnConnect, withOffset: 15)
     }
 
     private func addSettingsButton() {
@@ -234,38 +236,51 @@ extension ViewController: JoystickManagerDelegate {
 
     func didChangeThrottle(_ value: CGFloat) {
         let iValue = Int(value)
-        if iValue != self.throttle {
-            self.throttle = iValue
-            self.labelThrottle.text = "Throttle\n\(self.throttle)%"
-            self.sendComands()
-        }
+        self.throttle = iValue
+        self.labelThrottle.text = "Throttle\n\(self.throttle)%"
+        self.sendComands()
     }
 
     func didChangePitch(_ value: CGFloat) {
         let iValue = Int(value)
-        if iValue != self.pitch {
-            self.pitch = iValue
-            self.labelPitch.text = "Pitch\n\(self.pitch)"
+        if (iValue > 0 && iValue > minValue) {
+            self.pitch = iValue - minValue
             self.sendComands()
+        } else if (iValue < 0 && iValue < -minValue) {
+            self.pitch = iValue + minValue
+            self.sendComands()
+        } else {
+            self.pitch = 0
         }
+        self.labelPitch.text = "Pitch\n\(self.pitch)"
     }
 
     func didChangeRoll(_ value: CGFloat) {
         let iValue = Int(value)
-        if iValue != self.roll {
-            self.roll = iValue
-            self.labelRoll.text = "Roll\n\(self.roll)"
+        if (iValue > 0 && iValue > minValue) {
+            self.roll = iValue - minValue
             self.sendComands()
+        } else if (iValue < 0 && iValue < -minValue) {
+            self.roll = iValue + minValue
+            self.sendComands()
+        } else {
+            self.roll = 0
         }
+        self.labelRoll.text = "Roll\n\(self.roll)"
     }
 
     func didChangeYaw(_ value: CGFloat) {
         let iValue = Int(value)
-        if iValue != self.yaw {
-            self.yaw = iValue
-            self.labelYaw.text = "Yaw\n\(self.yaw)"
+        if (iValue > 0 && iValue > minValue) {
+            self.yaw = iValue - minValue
             self.sendComands()
+        } else if (iValue < 0 && iValue < -minValue) {
+            self.yaw = iValue + minValue
+            self.sendComands()
+        } else {
+            self.yaw = 0
         }
+        self.labelYaw.text = "Yaw\n\(self.yaw)"
     }
 
 }
@@ -274,11 +289,32 @@ extension ViewController: JoystickManagerDelegate {
 extension ViewController {
 
     @objc private func connect() {
-        guard let ip = self.ip else { return }
-        client = UDPClient.init(address: ip, port: port)
-        client?.enableBroadcast()
-        // enviar um comando e ver se deu success
-        self.toggleJoysticks(enabled: true)
+
+        if btnConnect.backgroundColor == .blue {
+            guard let ip = self.ip else { return }
+            client = UDPClient.init(address: ip, port: port)
+            client?.enableBroadcast()
+
+            if let data = "S".data(using: .utf8) {
+                let result = client?.send(data: data)
+                if result?.isFailure ?? false {
+                    let alert = UIAlertController(title: "Pegasus", message: "Não foi possível se conectar ao Drone.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                } else {
+                    btnConnect.backgroundColor = .red
+                    btnConnect.contentScaleFactor = 0.5
+                    btnConnect.titleLabel?.adjustsFontSizeToFitWidth = true
+                    btnConnect.setTitle("Disconnect", for: .normal)
+                }
+            }
+            self.toggleJoysticks(enabled: true)
+        } else {
+            client?.close()
+            btnConnect.backgroundColor = .blue
+            btnConnect.setTitle("Connect", for: .normal)
+            self.toggleJoysticks(enabled: false)
+        }
     }
 
     @objc private func start() {

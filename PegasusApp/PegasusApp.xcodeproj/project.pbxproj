@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		010B75782179549800EAE9EF /* MotorPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010B75772179549800EAE9EF /* MotorPreference.swift */; };
+		010B757B21795AAC00EAE9EF /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010B757A21795AAC00EAE9EF /* Data.swift */; };
 		012F27A02150ACF700EE253E /* CDJoystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012F279F2150ACF700EE253E /* CDJoystick.swift */; };
 		0194950421715D780079DBE2 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0194950321715D780079DBE2 /* SettingsViewController.swift */; };
 		01B9325D214D6919004B607D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B9325C214D6919004B607D /* AppDelegate.swift */; };
@@ -49,6 +51,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		010B75772179549800EAE9EF /* MotorPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotorPreference.swift; sourceTree = "<group>"; };
+		010B757A21795AAC00EAE9EF /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		012F279F2150ACF700EE253E /* CDJoystick.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDJoystick.swift; sourceTree = "<group>"; };
 		0194950321715D780079DBE2 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		01B93259214D6919004B607D /* PegasusApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PegasusApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -104,6 +108,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		010B75762179547200EAE9EF /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				010B75772179549800EAE9EF /* MotorPreference.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		01B93250214D6919004B607D = {
 			isa = PBXGroup;
 			children = (
@@ -126,6 +138,7 @@
 			children = (
 				01DA2B88217385B700B33FFA /* 3dr Party */,
 				01E3BF1D2172760100399F84 /* Extensions */,
+				010B75762179547200EAE9EF /* Models */,
 				01B93274214D6C94004B607D /* Utils */,
 				01B93273214D6C7F004B607D /* ViewControllers */,
 				01B9325C214D6919004B607D /* AppDelegate.swift */,
@@ -232,6 +245,7 @@
 			children = (
 				01E3BF202172764500399F84 /* UIColor.swift */,
 				01E3BF1E2172761600399F84 /* UIFont.swift */,
+				010B757A21795AAC00EAE9EF /* Data.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -335,11 +349,13 @@
 				01DA2BB32173864F00B33FFA /* TPKeyboardAvoidingTableView.m in Sources */,
 				01DA2BB22173864F00B33FFA /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
 				01F728712151BE3400510A2F /* JoystickManager.swift in Sources */,
+				010B75782179549800EAE9EF /* MotorPreference.swift in Sources */,
 				01E3BF1F2172761600399F84 /* UIFont.swift in Sources */,
 				01B9325F214D6919004B607D /* ViewController.swift in Sources */,
 				01E3BF212172764500399F84 /* UIColor.swift in Sources */,
 				01B9325D214D6919004B607D /* AppDelegate.swift in Sources */,
 				01F728732151C66B00510A2F /* FloatingPoint.swift in Sources */,
+				010B757B21795AAC00EAE9EF /* Data.swift in Sources */,
 				01DA2B9E2173860000B33FFA /* ALView+PureLayout.m in Sources */,
 				01DA2BA82173863000B33FFA /* UDPClient.swift in Sources */,
 				0194950421715D780079DBE2 /* SettingsViewController.swift in Sources */,
