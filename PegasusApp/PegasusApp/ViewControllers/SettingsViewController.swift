@@ -27,7 +27,6 @@ class SettingsViewController: UIViewController {
         setupNavigationBar()
         addCollectionView()
         loadLocalPreferences()
-
     }
 
     override func viewDidLayoutSubviews() {
@@ -47,7 +46,8 @@ class SettingsViewController: UIViewController {
         appearence.prefersLargeTitles = true
         appearence.isTranslucent = false
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .save, target: self, action: nil)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_save")?.withRenderingMode(.alwaysTemplate),
+                                                            style: .done, target: self, action: #selector(save))
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_close")?.withRenderingMode(.alwaysTemplate),
                                                            style: .done, target: self, action: #selector(dismissVC))
     }
@@ -80,7 +80,9 @@ extension SettingsViewController: UICollectionViewDelegate, UICollectionViewData
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MotorSettingsCell.reuseId, for: indexPath) as? MotorSettingsCell
-
+        cell?.motorIndex = indexPath.row
+        cell?.motorPref = preferences[indexPath.row]
+        cell?.delegate = self
         return cell ?? MotorSettingsCell()
     }
 
@@ -114,6 +116,24 @@ extension SettingsViewController {
         }
     }
 
+    @objc private func save() {
+        saveLocalPreferences()
+        let alert = UIAlertController(title: "Salvar", message: "Deseja salvar as preferências?", preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "Cancelar", style: .destructive, handler: { _ in
+            
+        }))
+        alert.addAction(UIAlertAction(title: "Salvar", style: .default, handler: { _ in
+            self.saveLocalPreferences()
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+}
+
+extension SettingsViewController: MotorSettingsCellDelegate {
+    func update(_ preference: MotorPreference, forMotorAt index: Int) {
+        self.preferences[index] = preference
+    }
 }
 
 // MARK: UI Interface Orientation

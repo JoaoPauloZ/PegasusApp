@@ -68,6 +68,11 @@ class ViewController: UIViewController {
         toggleJoysticks(enabled: false)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        //showSettings()
+    }
+
     var firstTime = true
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -76,7 +81,7 @@ class ViewController: UIViewController {
             rightJoystick.stickSize = CGSize(width: w, height: w)
             leftJoystick.stickSize = CGSize(width: w, height: w)
             btnConnect.layer.cornerRadius = btnConnect.frame.height/2
-            btnStart.layer.cornerRadius = btnStart.frame.height/2
+            //btnStart.layer.cornerRadius = btnStart.frame.height/2
             firstTime = false
         }
     }
@@ -192,17 +197,18 @@ extension ViewController {
     }
 
     private func addButtons() {
-        btnConnect.backgroundColor = .blue
-        btnConnect.setTitle("Connect", for: .normal)
+        btnConnect.tintColor = UIColor.pegasusGreen
+        btnConnect.setImage(UIImage(named: "ic_start")?.withRenderingMode(.alwaysTemplate), for: .normal)
         btnConnect.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
         btnConnect.layer.shadowRadius = 2
         btnConnect.layer.shadowColor = UIColor.black.cgColor
         btnConnect.layer.shadowOpacity = 0.2
         btnConnect.layer.shadowOffset = CGSize(width: 0, height: 3)
         btnConnect.addTarget(self, action: #selector(connect), for: .touchUpInside)
+        let degrees: Double = 180
+        self.btnConnect.transform = CGAffineTransform(rotationAngle: CGFloat(degrees * .pi/180))
         view.addSubview(btnConnect)
         btnConnect.autoAlignAxis(toSuperviewAxis: .vertical)
-        btnConnect.autoSetDimensions(to: CGSize(width: 100, height: 100))
         btnConnect.autoPinEdge(.top, to: .bottom, of: fieldIP, withOffset: 25)
 
 //        btnStart.backgroundColor = .red
@@ -290,7 +296,7 @@ extension ViewController {
 
     @objc private func connect() {
 
-        if btnConnect.backgroundColor == .blue {
+        if btnConnect.tintColor == .pegasusGreen {
             guard let ip = self.ip else { return }
             client = UDPClient.init(address: ip, port: port)
             client?.enableBroadcast()
@@ -302,17 +308,21 @@ extension ViewController {
                     alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                 } else {
-                    btnConnect.backgroundColor = .red
-                    btnConnect.contentScaleFactor = 0.5
-                    btnConnect.titleLabel?.adjustsFontSizeToFitWidth = true
-                    btnConnect.setTitle("Disconnect", for: .normal)
+                    UIView.animate(withDuration: 0.5) {
+                        self.btnConnect.tintColor = .red
+                        let degrees: Double = -90
+                        self.btnConnect.transform = CGAffineTransform(rotationAngle: CGFloat(degrees * .pi/180))
+                    }
                 }
             }
             self.toggleJoysticks(enabled: true)
         } else {
             client?.close()
-            btnConnect.backgroundColor = .blue
-            btnConnect.setTitle("Connect", for: .normal)
+            UIView.animate(withDuration: 0.5) {
+                self.btnConnect.tintColor = .pegasusGreen
+                let degrees: Double = 180
+                self.btnConnect.transform = CGAffineTransform(rotationAngle: CGFloat(degrees * .pi/180))
+            }
             self.toggleJoysticks(enabled: false)
         }
     }

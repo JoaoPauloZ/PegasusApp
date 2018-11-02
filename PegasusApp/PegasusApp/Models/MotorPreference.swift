@@ -30,4 +30,8 @@ class MotorPreference {
         increaseValue = dic["increaseValue"] as? Int ?? 0
     }
 
+    func copy() -> MotorPreference {
+        return MotorPreference.init(self.json)
+    }
+
 }

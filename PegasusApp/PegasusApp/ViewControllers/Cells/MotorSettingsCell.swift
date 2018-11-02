@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol MotorSettingsCellDelegate: class {
+    func update(_ preference: MotorPreference, forMotorAt index: Int)
+}
+
 class MotorSettingsCell: UICollectionViewCell {
 
     static let reuseId: String = "MotorSettingsCell"
@@ -32,6 +36,8 @@ class MotorSettingsCell: UICollectionViewCell {
             }
         }
     }
+
+    var delegate: MotorSettingsCellDelegate?
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -61,7 +67,8 @@ class MotorSettingsCell: UICollectionViewCell {
 
         minSpeedField.floatingLabel.text = "Potência mínima"
         minSpeedField.alwaysShowFloatingLabel = true
-        minSpeedField.keyboardType = .numbersAndPunctuation
+        minSpeedField.keyboardType = .numberPad
+        minSpeedField.delegate = self
         contentView.addSubview(minSpeedField)
         minSpeedField.autoMatch(.width, to: .width, of: minSpeedField.floatingLabel)
         minSpeedField.autoPinEdge(.top, to: .bottom, of: titleLabel, withOffset: 20)
@@ -69,7 +76,8 @@ class MotorSettingsCell: UICollectionViewCell {
 
         maxSpeedField.floatingLabel.text = "Potência máxima"
         maxSpeedField.alwaysShowFloatingLabel = true
-        maxSpeedField.keyboardType = .numbersAndPunctuation
+        maxSpeedField.keyboardType = .numberPad
+        maxSpeedField.delegate = self
         contentView.addSubview(maxSpeedField)
         maxSpeedField.autoMatch(.width, to: .width, of: maxSpeedField.floatingLabel)
         maxSpeedField.autoPinEdge(.top, to: .bottom, of: titleLabel, withOffset: 20)
@@ -77,10 +85,35 @@ class MotorSettingsCell: UICollectionViewCell {
 
         increaseField.floatingLabel.text = "Incremento"
         increaseField.alwaysShowFloatingLabel = true
-        increaseField.keyboardType = .numbersAndPunctuation
+        increaseField.keyboardType = .numberPad
+        increaseField.delegate = self
         contentView.addSubview(increaseField)
         increaseField.autoMatch(.width, to: .width, of: increaseField.floatingLabel)
         increaseField.autoPinEdge(.top, to: .bottom, of: minSpeedField, withOffset: 15)
         increaseField.autoPinEdge(.left, to: .left, of: titleLabel)
+    }
+}
+
+extension MotorSettingsCell: UITextFieldDelegate {
+
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let text = textField.text, let textRange = Range(range, in: text) {
+            let fullText = text.replacingCharacters(in: textRange, with: string)
+
+            let number = Int(fullText) ?? 0
+
+            if textField == minSpeedField {
+                motorPref?.minAngleESC = number
+            } else if textField == maxSpeedField {
+                motorPref?.maxAngleESC = number
+            } else if textField == increaseField {
+                motorPref?.increaseValue = number
+            }
+            if let pref = self.motorPref, motorIndex > -1 {
+                delegate?.update(pref, forMotorAt: self.motorIndex)
+            }
+
+        }
+        return true
     }
 }
