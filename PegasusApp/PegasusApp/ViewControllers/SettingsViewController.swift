@@ -13,7 +13,17 @@ class SettingsViewController: UIViewController {
     private var collectionView: TPKeyboardAvoidingCollectionView!
     private lazy var flowLayout = UICollectionViewFlowLayout()
 
+    var client: UDPClient?
     var preferences: [MotorPreference] = []
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    init(_ client: UDPClient?) {
+        super.init(nibName: nil, bundle: nil)
+        self.client = client
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -121,13 +131,39 @@ extension SettingsViewController {
         let alert = UIAlertController(title: "Salvar", message: "Deseja salvar as preferências?", preferredStyle: .alert)
 
         alert.addAction(UIAlertAction(title: "Cancelar", style: .destructive, handler: { _ in
-            
+
         }))
         alert.addAction(UIAlertAction(title: "Salvar", style: .default, handler: { _ in
             self.saveLocalPreferences()
+            self.sendToDrone()
         }))
         self.present(alert, animated: true, completion: nil)
     }
+
+    private func sendToDrone() {
+        var comands = "U"
+        comands += preferences.map { pref -> String in
+            var values = ""
+            values += String(pref.increaseValue)
+            values += ";"
+            values += String(pref.minAngleESC)
+            values += ";"
+            values += String(pref.maxAngleESC)
+            values += ";&"
+            return values
+        }.joined()
+        print(comands)
+        guard let client = self.client else {
+            let alert = UIAlertController(title: "Pegasus", message: "As preferências foram salvas localmente, mas não foram enviadas  ao drone. Por favor reconecte-se ao drone e tente novamente.", preferredStyle: .alert)
+
+            alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        let result = client.send(data: comands.data(using: .utf8) ?? Data())
+        print("Sended: \(result.isSuccess)")
+    }
+
 }
 
 extension SettingsViewController: MotorSettingsCellDelegate {

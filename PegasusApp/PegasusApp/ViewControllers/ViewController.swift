@@ -49,6 +49,7 @@ class ViewController: UIViewController {
     private var yaw: Int = 0
 
     private var minValue: Int = 20
+    private var lastComands = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,7 +82,6 @@ class ViewController: UIViewController {
             rightJoystick.stickSize = CGSize(width: w, height: w)
             leftJoystick.stickSize = CGSize(width: w, height: w)
             btnConnect.layer.cornerRadius = btnConnect.frame.height/2
-            //btnStart.layer.cornerRadius = btnStart.frame.height/2
             firstTime = false
         }
     }
@@ -102,12 +102,16 @@ class ViewController: UIViewController {
     }
 
     @objc private func showSettings() {
-        let vc = SettingsViewController()
+        let vc = SettingsViewController.init(self.client)
         let nav = UINavigationController(rootViewController: vc)
         nav.modalTransitionStyle = .crossDissolve
         present(nav, animated: true, completion: nil)
     }
 
+    private func vibrete(style: UIImpactFeedbackGenerator.FeedbackStyle) {
+        let generator = UIImpactFeedbackGenerator(style: style)
+        generator.impactOccurred()
+    }
 }
 
 // MARK: Layout
@@ -210,19 +214,6 @@ extension ViewController {
         view.addSubview(btnConnect)
         btnConnect.autoAlignAxis(toSuperviewAxis: .vertical)
         btnConnect.autoPinEdge(.top, to: .bottom, of: fieldIP, withOffset: 25)
-
-//        btnStart.backgroundColor = .red
-//        btnStart.setTitle("Start", for: .normal)
-//        btnStart.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
-//        btnStart.layer.shadowRadius = 2
-//        btnStart.layer.shadowColor = UIColor.black.cgColor
-//        btnStart.layer.shadowOpacity = 0.2
-//        btnStart.layer.shadowOffset = CGSize(width: 0, height: 3)
-//        btnStart.addTarget(self, action: #selector(start), for: .touchUpInside)
-//        view.addSubview(btnStart)
-//        btnStart.autoAlignAxis(toSuperviewAxis: .vertical)
-//        btnStart.autoSetDimensions(to: CGSize(width: 100, height: 100))
-//        btnStart.autoPinEdge(.top, to: .bottom, of: btnConnect, withOffset: 15)
     }
 
     private func addSettingsButton() {
@@ -296,6 +287,8 @@ extension ViewController {
 
     @objc private func connect() {
 
+        self.vibrete(style: .heavy)
+
         if btnConnect.tintColor == .pegasusGreen {
             guard let ip = self.ip else { return }
             client = UDPClient.init(address: ip, port: port)
@@ -318,6 +311,7 @@ extension ViewController {
             self.toggleJoysticks(enabled: true)
         } else {
             client?.close()
+            client = nil
             UIView.animate(withDuration: 0.5) {
                 self.btnConnect.tintColor = .pegasusGreen
                 let degrees: Double = 180
@@ -336,11 +330,15 @@ extension ViewController {
     private func sendComands() {
         //let fullStr = "T=\(throttle);P=\(pitch);R=\(roll);Y=\(yaw)"
         let fullStr = "C\(throttle);\(pitch);\(roll);\(yaw);"
-        print(fullStr)
         if let data = fullStr.data(using: .utf8) {
             let result = client?.send(data: data)
             print("Sended: \(result?.isSuccess ?? false)")
         }
+
+        if fullStr != lastComands {
+            self.vibrete(style: .light)
+        }
+        lastComands = fullStr
     }
 
 }
